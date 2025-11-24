@@ -1,0 +1,200 @@
+/* ===== ROOT & GLOBAL ===== */
+:root {
+  --color-text: #dee2e6;
+  --color-text-dark: #adb5bd;
+  --color-background-100: #973030;
+  --color-background-500: #6d2727;
+  --color-background-900: #3D1414;
+
+  --shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 1px 1px 2px rgba(255, 255, 255, .3);
+  --shadow-inset-small: inset 1px 1px 1px rgba(255, 255, 255, .3);
+  --shadow-box: 6px 6px 12px rgba(0, 0, 0, 0.5);
+  --shadow-light: 0px 1px 2px rgba(255, 255, 255, .3);
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--color-text);
+  background-color: var(--color-background-900);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+}
+
+body {
+  margin: 0;
+  padding-top: 5rem;
+}
+
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+input {
+  padding: 1rem 1.5rem;
+  border-radius: 100px;
+  background-color: var(--color-background-900);
+  box-shadow: var(--shadow-inset);
+}
+
+input::placeholder {
+  color: var(--color-text-dark);
+}
+
+/* ===== HEADER ===== */
+header {
+  width: 100vw;
+  height: 5rem;
+  border-radius: 0 0 24px 24px;
+  display: flex;
+  background-color: var(--color-background-100);
+  position: absolute;
+  top: 0;
+  justify-content: space-between;
+  padding: 0 3rem;
+  align-items: center;
+  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.8);
+}
+
+header input {
+  width: 20rem;
+}
+
+/* ===== CONTENT LAYOUT ===== */
+.content {
+  height: calc(100vh - 5rem);
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  place-content: center top;
+  padding: 1rem 2rem;
+}
+
+/* ===== MOVIE LIST BOX ===== */
+.movielistbox {
+  height: 80vh;
+  background-color: var(--color-background-500);
+  border-radius: 12px;
+  box-shadow: var(--shadow-box), var(--shadow-inset-small);
+  padding: 2rem;
+  overflow-x: scroll;
+  transition: .3s;
+}
+
+.movielistbox.closed {
+  height: 17vh;
+}
+
+.movielistbox ul {
+  height: 83%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-x: scroll;
+  padding: 0;
+}
+
+/* ===== MOVIE LIST HEADER ===== */
+.movie-list-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ===== TOGGLE BUTTON ===== */
+.toggle-button {
+  display: grid;
+  place-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100px;
+  background-color: var(--color-background-100);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5), var(--shadow-inset-small);
+  cursor: pointer;
+  transition: .3s ease-in;
+}
+
+.toggle-button * {
+  transition: 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.toggle-button:hover * {
+  transform: rotate(360deg);
+}
+
+.toggle-button.active {
+  background-color: var(--color-background-900);
+  box-shadow: var(--shadow-inset);
+}
+
+.no-padding {
+  padding: 0;
+  padding-bottom: .15rem;
+  margin: 0;
+  transform-origin: center;
+  line-height: 0;
+}
+
+/* ===== MOVIE ITEM ===== */
+.movie {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 12px;
+  transition: .3s;
+}
+
+.movie:hover {
+  background-color: var(--color-background-900);
+  box-shadow: var(--shadow-inset), var(--shadow-light);
+  cursor: pointer;
+}
+
+.movie img {
+  width: 4rem;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* ===== MOVIE CONTENT ===== */
+.movie-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.movie-info {
+  display: flex;
+  gap: 1rem;
+}
+
+.movie-info p {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+/* ===== SUMMARY ===== */
+.summary {
+  display: flex;
+  gap: 1rem;
+}
