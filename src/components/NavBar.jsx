@@ -1,23 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useMovieContext } from '../context/MovieContext';
 
 export const NavBar = () => {
-    const [searchTerm, setSearchTerm] = useState( '' );
-    const { handleSearch } = useMovieContext();
-
-    const handleInputChange = ( e ) => {
-        setSearchTerm( e.target.value );
-    };
+    const { query, setQuery, movies, handleSearch } = useMovieContext();
 
     useEffect( () => {
         const timeout = setTimeout( () => {
-            if ( searchTerm.trim() !== '' ) {
-                handleSearch( searchTerm );
-            }
+            handleSearch( query );
         }, 500 );
 
         return () => clearTimeout( timeout );
-    }, [searchTerm, handleSearch] );
+    }, [query, handleSearch] );
 
     return (
         <header className='navbar'>
@@ -25,10 +18,10 @@ export const NavBar = () => {
             <input
                 type="text"
                 placeholder='Search...'
-                value={ searchTerm }
-                onChange={ handleInputChange }
+                value={ query }
+                onChange={ ( e ) => setQuery( e.target.value ) }
             />
-            <p>Found { results } results</p>
+            <p>Found { movies.length } results</p>
         </header>
     );
 };
