@@ -1,13 +1,12 @@
-import { createContext, useContext, useState } from 'react';
-import { TEMP_MOVIE_DATA, TEMP_WATCHED_DATA } from '../data/moviesData';
-import * as moviesService from '../services/moviesService';
+import { createContext, useContext, useState, useCallback } from 'react';
+import * as moviesService from '../services/MoviesService';
 
 const MovieContext = createContext();
 
 export const MovieProvider = ( { children } ) => {
     const [query, setQuery] = useState( "" );
-    const [movies, setMovies] = useState( TEMP_MOVIE_DATA );
-    const [watched, setWatched] = useState( TEMP_WATCHED_DATA );
+    const [movies, setMovies] = useState( [] );
+    const [watched, setWatched] = useState( [] );
     const [isOpen1, setIsOpen1] = useState( true );
     const [isOpen2, setIsOpen2] = useState( true );
     const [loading, setLoading] = useState( false );
@@ -15,9 +14,10 @@ export const MovieProvider = ( { children } ) => {
 
     const toggleOpen = ( setter ) => setter( ( open ) => !open );
 
-    const handleSearch = async ( searchQuery ) => {
+    const handleSearch = useCallback( async ( searchQuery ) => {
         if ( !searchQuery.trim() ) {
-            setMovies( TEMP_MOVIE_DATA );
+            setMovies( [] );
+            setError( null );
             return;
         }
 
@@ -27,12 +27,13 @@ export const MovieProvider = ( { children } ) => {
             const results = await moviesService.searchMovies( searchQuery );
             setMovies( results );
         } catch ( err ) {
-            setError( 'Error al buscar películas' );
+            setMovies( [] );
+            setError( err.message || 'Error al buscar películas' );
             console.error( err );
         } finally {
             setLoading( false );
         }
-    };
+    }, [] );
 
     const value = {
         query,
