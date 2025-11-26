@@ -11,6 +11,10 @@ export const MovieProvider = ( { children } ) => {
     const [isOpen2, setIsOpen2] = useState( true );
     const [loading, setLoading] = useState( false );
     const [error, setError] = useState( null );
+    const [selectedMovieId, setSelectedMovieId] = useState( null );
+    const [selectedMovie, setSelectedMovie] = useState( null );
+    const [detailsLoading, setDetailsLoading] = useState( false );
+    const [detailsError, setDetailsError] = useState( null );
 
     const toggleOpen = ( setter ) => setter( ( open ) => !open );
 
@@ -23,6 +27,9 @@ export const MovieProvider = ( { children } ) => {
 
         setLoading( true );
         setError( null );
+        setSelectedMovieId( null );
+        setSelectedMovie( null );
+        setDetailsError( null );
         try {
             const results = await moviesService.searchMovies( searchQuery );
             setMovies( results );
@@ -32,6 +39,25 @@ export const MovieProvider = ( { children } ) => {
             console.error( err );
         } finally {
             setLoading( false );
+        }
+    }, [] );
+
+    const selectMovie = useCallback( async ( imdbID ) => {
+        if ( !imdbID ) return;
+
+        setSelectedMovieId( imdbID );
+        setDetailsLoading( true );
+        setDetailsError( null );
+
+        try {
+            const details = await moviesService.getMovieDetails( imdbID );
+            setSelectedMovie( details );
+        } catch ( err ) {
+            setSelectedMovie( null );
+            setDetailsError( err.message || 'Error al obtener el detalle de la película' );
+            console.error( err );
+        } finally {
+            setDetailsLoading( false );
         }
     }, [] );
 
@@ -50,6 +76,11 @@ export const MovieProvider = ( { children } ) => {
         handleSearch,
         loading,
         error,
+        selectedMovieId,
+        selectedMovie,
+        selectMovie,
+        detailsLoading,
+        detailsError,
     };
 
     return (

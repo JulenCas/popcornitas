@@ -1,11 +1,13 @@
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = 'https://www.omdbapi.com/';
 
+const normalizeField = ( value ) => ( value && value !== 'N/A' ? value : '' );
+
 const normalizeMovie = ( movie ) => ( {
   imdbID: movie.imdbID,
   title: movie.Title,
   year: movie.Year,
-  poster: movie.Poster,
+  poster: normalizeField( movie.Poster ),
 } );
 
 export const searchMovies = async ( query ) => {
@@ -21,6 +23,7 @@ export const searchMovies = async ( query ) => {
   }
 
   const data = await response.json();
+
   if ( data.Response === 'False' ) {
     throw new Error( data.Error || 'No se encontraron resultados' );
   }
@@ -29,7 +32,8 @@ export const searchMovies = async ( query ) => {
 };
 
 export const getMovieDetails = async ( imdbID ) => {
-  const response = await fetch( `${BASE_URL}?apikey=${API_KEY}&i=${imdbID}` );
+  const response = await fetch( `${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=full` );
+
   if ( !response.ok ) {
     throw new Error( 'No se pudo obtener el detalle de la película' );
   }
@@ -44,10 +48,16 @@ export const getMovieDetails = async ( imdbID ) => {
     imdbID: data.imdbID,
     title: data.Title,
     year: data.Year,
-    poster: data.Poster,
-    imdbRating: data.imdbRating,
-    runtime: data.Runtime,
-    genre: data.Genre,
-    plot: data.Plot,
+    released: normalizeField( data.Released ),
+    poster: normalizeField( data.Poster ),
+    imdbRating: normalizeField( data.imdbRating ),
+    imdbVotes: normalizeField( data.imdbVotes ),
+    runtime: normalizeField( data.Runtime ),
+    genre: normalizeField( data.Genre ),
+    plot: normalizeField( data.Plot ),
+    director: normalizeField( data.Director ),
+    actors: normalizeField( data.Actors ),
+    language: normalizeField( data.Language ),
+    country: normalizeField( data.Country ),
   };
 };
