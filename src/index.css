@@ -1,15 +1,11 @@
-/* ===== ROOT & GLOBAL ===== */
 :root {
+  --color-primary: #6741d9;
+  --color-primary-light: #7950f2;
   --color-text: #dee2e6;
   --color-text-dark: #adb5bd;
   --color-background-100: #973030;
   --color-background-500: #6d2727;
   --color-background-900: #3D1414;
-
-  --shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 1px 1px 2px rgba(255, 255, 255, .3);
-  --shadow-inset-small: inset 1px 1px 1px rgba(255, 255, 255, .3);
-  --shadow-box: 6px 6px 12px rgba(0, 0, 0, 0.5);
-  --shadow-light: 0px 1px 2px rgba(255, 255, 255, .3);
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -42,18 +38,27 @@ p {
   margin-top: 0;
 }
 
+.content {
+  height: calc(100vh - 5rem);
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  place-content: center top;
+  padding: 1rem 2rem;
+}
+
 input {
   padding: 1rem 1.5rem;
   border-radius: 100px;
   background-color: var(--color-background-900);
-  box-shadow: var(--shadow-inset);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 1px 1px 2px rgba(255, 255, 255, .3);
 }
 
 input::placeholder {
   color: var(--color-text-dark);
 }
 
-/* ===== HEADER ===== */
 header {
   width: 100vw;
   height: 5rem;
@@ -72,23 +77,11 @@ header input {
   width: 20rem;
 }
 
-/* ===== CONTENT LAYOUT ===== */
-.content {
-  height: calc(100vh - 5rem);
-  width: 100vw;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  place-content: center top;
-  padding: 1rem 2rem;
-}
-
-/* ===== MOVIE LIST BOX ===== */
 .movielistbox {
   height: 80vh;
   background-color: var(--color-background-500);
   border-radius: 12px;
-  box-shadow: var(--shadow-box), var(--shadow-inset-small);
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), inset 1px 1px 2px rgba(255, 255, 255, .3);
   padding: 2rem;
   overflow-x: scroll;
   transition: .3s;
@@ -98,22 +91,11 @@ header input {
   height: 17vh;
 }
 
-.movielistbox ul {
-  height: 83%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow-x: scroll;
-  padding: 0;
-}
-
-/* ===== MOVIE LIST HEADER ===== */
 .movie-list-header {
   display: flex;
   justify-content: space-between;
 }
 
-/* ===== TOGGLE BUTTON ===== */
 .toggle-button {
   display: grid;
   place-content: center;
@@ -121,22 +103,12 @@ header input {
   height: 2rem;
   border-radius: 100px;
   background-color: var(--color-background-100);
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5), var(--shadow-inset-small);
-  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5), inset 1px 1px 1px rgba(255, 255, 255, .3);
   transition: .3s ease-in;
 }
 
 .toggle-button * {
   transition: 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-.toggle-button:hover * {
-  transform: rotate(360deg);
-}
-
-.toggle-button.active {
-  background-color: var(--color-background-900);
-  box-shadow: var(--shadow-inset);
 }
 
 .no-padding {
@@ -147,7 +119,33 @@ header input {
   line-height: 0;
 }
 
-/* ===== MOVIE ITEM ===== */
+.toggle-button:hover {
+  cursor: pointer;
+}
+
+.toggle-button:hover * {
+  transform: rotate(360deg);
+}
+
+.toggle-button.active {
+  background-color: var(--color-background-900);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 1px 1px 2px rgba(255, 255, 255, .3);
+}
+
+.movielistbox ul {
+  height: 83%;
+  display: flex;
+  gap: 1rem;
+  overflow-x: scroll;
+  flex-direction: column;
+  padding: 0;
+}
+
+.summary {
+  display: flex;
+  gap: 1rem;
+}
+
 .movie {
   display: flex;
   align-items: center;
@@ -157,9 +155,9 @@ header input {
 }
 
 .movie:hover {
-  background-color: var(--color-background-900);
-  box-shadow: var(--shadow-inset), var(--shadow-light);
   cursor: pointer;
+  background-color: var(--color-background-900);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 0px 1px 2px rgba(255, 255, 255, .3);
 }
 
 .movie img {
@@ -168,22 +166,22 @@ header input {
   border-radius: 5px;
 }
 
-/* ===== MOVIE CONTENT ===== */
 .movie-content {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.info-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .movie-info {
   display: flex;
   gap: 1rem;
+}
+
+.info-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .movie-info p {
@@ -193,8 +191,96 @@ header input {
   margin: 0;
 }
 
-/* ===== SUMMARY ===== */
-.summary {
+.movie.selected {
+  background-color: var(--color-background-900);
+  box-shadow: var(--shadow-inset), var(--shadow-light);
+}
+
+
+/* ===== MOVIE DETAILS ===== */
+.right-panel {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movie-details {
+  min-height: 18rem;
+}
+
+.movie-details-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.movie-details-poster {
+  width: 14rem;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: var(--shadow-box);
+  object-fit: cover;
+  background-color: var(--color-background-900);
+}
+
+.movie-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.movie-details-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.movie-details-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.movie-details-plot {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.movie-details-extra {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-text);
+}
+
+.movie-details-extra strong {
+  color: var(--color-text);
+}
+
+.error {
+  color: #ffb5b5;
+}
+
+.star-rating {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.star {
+  background: none;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  font-size: 1.6rem;
+  padding: 0;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.star:hover {
+  transform: translateY(-2px);
+}
+
+.star.filled {
+  color: gold;
 }
