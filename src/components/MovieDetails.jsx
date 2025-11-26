@@ -52,7 +52,7 @@ export const MovieDetails = () => {
     }, [selectedMovie] );
 
     return (
-        <MovieListBox className="movie-details">
+        <div className="movie-details">
             { detailsLoading && <p>Cargando detalle...</p> }
             { detailsError && <p className="error">{ detailsError }</p> }
 
@@ -62,11 +62,11 @@ export const MovieDetails = () => {
 
             { !detailsLoading && !detailsError && selectedMovie && (
                 <div className="movie-details-body">
-                    <img
+                    {/* <img
                         className="movie-details-poster"
                         src={ poster }
                         alt={ `${selectedMovie.title} poster` }
-                    />
+                    /> */}
 
                     <div className="movie-details-content">
                         <div className="movie-details-heading">
@@ -127,6 +127,6 @@ export const MovieDetails = () => {
                     </div>
                 </div>
             ) }
-        </MovieListBox>
+        </div>
     );
 };

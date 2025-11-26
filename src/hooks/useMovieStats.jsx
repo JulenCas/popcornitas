@@ -3,6 +3,11 @@ import { useMemo } from 'react';
 const calculateAverage = ( arr ) =>
     arr.length === 0 ? 0 : arr.reduce( ( acc, cur ) => acc + cur / arr.length, 0 );
 
+const formatNumber = ( num ) => {
+    const rounded = Math.round( num * 100 ) / 100; // redondea a 2 decimales reales
+    return Number.isInteger( rounded ) ? rounded : rounded.toString();
+};
+
 export const useMovieStats = ( watched ) => {
     const stats = useMemo( () => {
         const imdbRatings = watched.map( ( movie ) => movie.imdbRating );
@@ -10,9 +15,9 @@ export const useMovieStats = ( watched ) => {
         const runtimes = watched.map( ( movie ) => movie.runtime );
 
         return {
-            avgImdbRating: calculateAverage( imdbRatings ),
-            avgUserRating: calculateAverage( userRatings ),
-            avgRuntime: calculateAverage( runtimes ),
+            avgImdbRating: formatNumber( calculateAverage( imdbRatings ) ),
+            avgUserRating: formatNumber( calculateAverage( userRatings ) ),
+            avgRuntime: formatNumber( calculateAverage( runtimes ) ),
             numMovies: watched.length,
         };
     }, [watched] );

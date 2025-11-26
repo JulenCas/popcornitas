@@ -9,7 +9,7 @@ import { MovieListBox } from "./components/MovieListBox";
 import { MovieDetails } from './components/MovieDetails';
 
 export const AppContent = () => {
-    const { isOpen1, setIsOpen1, isOpen2, setIsOpen2, movies, watched, toggleOpen, loading, error } = useMovieContext();
+    const { isOpen1, setIsOpen1, isOpen2, setIsOpen2, movies, watched, toggleOpen, selectedMovieId, loading, error } = useMovieContext();
     const { avgImdbRating, avgUserRating, avgRuntime } = useMovieStats( watched );
 
     return (
@@ -35,28 +35,31 @@ export const AppContent = () => {
                     </div>
                     { isOpen1 && <MovieList movies={ movies } /> }
                 </MovieListBox>
-                <div className="right-panel">
-                    <MovieDetails />
+                <MovieListBox className={ isOpen2 ? '' : 'closed' }>
+                    <div className="movie-list-header">
+                        <WatchSummary
+                            watched={ watched }
+                            avgImdbRating={ avgImdbRating }
+                            avgRuntime={ avgRuntime }
+                            avgUserRating={ avgUserRating }
+                        />
+                        <button
+                            className={ `toggle-button ${isOpen2 ? 'active' : ''}` }
+                            onClick={ () => toggleOpen( setIsOpen2 ) }
+                            aria-label="Toggle watched"
+                        >
+                            <span className="no-padding">{ isOpen2 ? '-' : '+' }</span>
+                        </button>
+                    </div>
+                    {
+                        selectedMovieId !== null
+                            ? <MovieDetails />
+                            : isOpen2 && <WatchedList watched={ watched } />
 
-                    <MovieListBox className={ isOpen2 ? '' : 'closed' }>
-                        <div className="movie-list-header">
-                            <WatchSummary
-                                watched={ watched }
-                                avgImdbRating={ avgImdbRating }
-                                avgRuntime={ avgRuntime }
-                                avgUserRating={ avgUserRating }
-                            />
-                            <button
-                                className={ `toggle-button ${isOpen2 ? 'active' : ''}` }
-                                onClick={ () => toggleOpen( setIsOpen2 ) }
-                                aria-label="Toggle watched"
-                            >
-                                <span className="no-padding">{ isOpen2 ? '-' : '+' }</span>
-                            </button>
-                        </div>
-                        { isOpen2 && <WatchedList watched={ watched } /> }
-                    </MovieListBox>
-                </div>
+                    }
+
+
+                </MovieListBox>
             </div>
         </>
     );
