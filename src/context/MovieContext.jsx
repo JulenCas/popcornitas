@@ -1,12 +1,33 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import * as moviesService from '../services/MoviesService';
 
 const MovieContext = createContext();
+const WATCHED_STORAGE_KEY = 'popcornitas:watched';
+
+const getStoredWatched = () => {
+    try {
+        const stored = localStorage.getItem( WATCHED_STORAGE_KEY );
+        return stored ? JSON.parse( stored ) : [];
+    } catch ( error ) {
+        console.error( 'No se pudo leer la lista de vistos desde el almacenamiento', error );
+        return [];
+    }
+};
+
+const parseRuntime = ( runtime ) => {
+    const parsed = parseInt( runtime, 10 );
+    return Number.isNaN( parsed ) ? 0 : parsed;
+};
+
+const parseRating = ( rating ) => {
+    const parsed = Number( rating );
+    return Number.isNaN( parsed ) ? 0 : parsed;
+};
 
 export const MovieProvider = ( { children } ) => {
     const [query, setQuery] = useState( "" );
     const [movies, setMovies] = useState( [] );
-    const [watched, setWatched] = useState( [] );
+    const [watched, setWatched] = useState( getStoredWatched );
     const [isOpen1, setIsOpen1] = useState( true );
     const [isOpen2, setIsOpen2] = useState( true );
     const [loading, setLoading] = useState( false );
@@ -17,6 +38,14 @@ export const MovieProvider = ( { children } ) => {
     const [detailsError, setDetailsError] = useState( null );
 
     const toggleOpen = ( setter ) => setter( ( open ) => !open );
+
+    useEffect( () => {
+        try {
+            localStorage.setItem( WATCHED_STORAGE_KEY, JSON.stringify( watched ) );
+        } catch ( error ) {
+            console.error( 'No se pudo guardar la lista de vistos en el almacenamiento', error );
+        }
+    }, [watched] );
 
     const handleSearch = useCallback( async ( searchQuery ) => {
         if ( !searchQuery.trim() ) {
@@ -61,6 +90,31 @@ export const MovieProvider = ( { children } ) => {
         }
     }, [] );
 
+    const addToWatched = useCallback( ( movie, userRating ) => {
+        if ( !movie ) return;
+
+        setWatched( ( prevWatched ) => {
+            const runtime = parseRuntime( movie.runtime );
+            const imdbRating = parseRating( movie.imdbRating );
+            const updatedMovie = {
+                ...movie,
+                runtime,
+                imdbRating,
+                userRating,
+            };
+
+            const movieIndex = prevWatched.findIndex( ( item ) => item.imdbID === movie.imdbID );
+
+            if ( movieIndex !== -1 ) {
+                const updated = [...prevWatched];
+                updated[movieIndex] = { ...updated[movieIndex], ...updatedMovie };
+                return updated;
+            }
+
+            return [...prevWatched, updatedMovie];
+        } );
+    }, [] );
+
     const value = {
         query,
         setQuery,
@@ -68,6 +122,7 @@ export const MovieProvider = ( { children } ) => {
         setMovies,
         watched,
         setWatched,
+        addToWatched,
         isOpen1,
         setIsOpen1,
         isOpen2,

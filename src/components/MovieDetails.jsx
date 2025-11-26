@@ -5,9 +5,9 @@ import { SmallData } from './SmallData';
 
 const FALLBACK_POSTER = 'https://via.placeholder.com/300x450/3D1414/DEE2E6?text=No+image';
 
-const StarRating = ( { max = 10 } ) => {
+const StarRating = ( { max = 10, defaultValue = 0, onRate = () => { } } ) => {
     const [hoveredStar, setHoveredStar] = useState( 0 );
-    const [selectedStar, setSelectedStar] = useState( 0 );
+    const [selectedStar, setSelectedStar] = useState( defaultValue );
 
     const effectiveRating = hoveredStar || selectedStar;
 
@@ -24,7 +24,10 @@ const StarRating = ( { max = 10 } ) => {
                         className={ `star ${isFilled ? 'filled' : ''}` }
                         onMouseEnter={ () => setHoveredStar( starValue ) }
                         onMouseLeave={ () => setHoveredStar( 0 ) }
-                        onClick={ () => setSelectedStar( starValue ) }
+                        onClick={ () => {
+                            setSelectedStar( starValue );
+                            onRate( starValue );
+                        } }
                         aria-label={ `Calificar con ${starValue} estrellas` }
                     >
                         ★
@@ -36,12 +39,17 @@ const StarRating = ( { max = 10 } ) => {
 };
 
 export const MovieDetails = () => {
-    const { selectedMovie, detailsLoading, detailsError } = useMovieContext();
+    const { selectedMovie, detailsLoading, detailsError, watched, addToWatched } = useMovieContext();
+
+    const watchedMovie = useMemo(
+        () => watched.find( ( movie ) => movie.imdbID === selectedMovie?.imdbID ),
+        [watched, selectedMovie?.imdbID],
+    );
 
     const poster = useMemo( () => {
         if ( !selectedMovie?.poster ) return FALLBACK_POSTER;
         return selectedMovie.poster !== 'N/A' ? selectedMovie.poster : FALLBACK_POSTER;
-    }, [selectedMovie?.poster] );
+    }, [selectedMovie] );
 
     return (
         <MovieListBox className="movie-details">
@@ -111,7 +119,11 @@ export const MovieDetails = () => {
                             ) }
                         </div>
 
-                        <StarRating key={ selectedMovie.imdbID } />
+                        <StarRating
+                            key={ selectedMovie.imdbID }
+                            defaultValue={ watchedMovie?.userRating || 0 }
+                            onRate={ ( rating ) => addToWatched( selectedMovie, rating ) }
+                        />
                     </div>
                 </div>
             ) }
