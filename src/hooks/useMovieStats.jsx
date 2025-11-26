@@ -4,7 +4,7 @@ const calculateAverage = ( arr ) =>
     arr.length === 0 ? 0 : arr.reduce( ( acc, cur ) => acc + cur / arr.length, 0 );
 
 const formatNumber = ( num ) => {
-    const rounded = Math.round( num * 100 ) / 100; // redondea a 2 decimales reales
+    const rounded = Math.round( num * 100 ) / 100;
     return Number.isInteger( rounded ) ? rounded : rounded.toString();
 };
 

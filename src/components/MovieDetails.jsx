@@ -91,7 +91,6 @@ export const MovieDetails = () => {
                         </div>
 
                         <p className="movie-details-plot">
-                            {/* Todo: read more pop up and text trim (200 char) */ }
                             { selectedMovie.plot || 'No hay sinopsis disponible para esta película.' }
                         </p>
 
