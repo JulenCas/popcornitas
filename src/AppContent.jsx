@@ -15,9 +15,6 @@ export const AppContent = () => {
     return (
         <>
             <NavBar />
-
-            {/* Todo: conditional rendering for movie details / watched movies */ }
-
             { error && <p style={ { color: 'red' } }>{ error }</p> }
             { loading && <p>Cargando...</p> }
 
