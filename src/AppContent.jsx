@@ -9,15 +9,12 @@ import { MovieListBox } from "./components/MovieListBox";
 import { MovieDetails } from './components/MovieDetails';
 
 export const AppContent = () => {
-    const { isOpen1, setIsOpen1, isOpen2, setIsOpen2, movies, watched, toggleOpen, loading, error } = useMovieContext();
-    const { avgImdbRating, avgUserRating, avgRuntime } = useMovieStats( watched );
+    const { isOpen1, setIsOpen1, isOpen2, setIsOpen2, movies, watched, selectedMovie, toggleOpen, loading, error } = useMovieContext();
+    const { avgImdbRating, avgUserRating, totalRuntime } = useMovieStats( watched );
 
     return (
         <>
             <NavBar />
-
-            {/* Todo: conditional rendering for movie details / watched movies */ }
-
             { error && <p style={ { color: 'red' } }>{ error }</p> }
             { loading && <p>Cargando...</p> }
 
@@ -36,14 +33,13 @@ export const AppContent = () => {
                     { isOpen1 && <MovieList movies={ movies } /> }
                 </MovieListBox>
                 <div className="right-panel">
-                    <MovieDetails />
 
                     <MovieListBox className={ isOpen2 ? '' : 'closed' }>
                         <div className="movie-list-header">
                             <WatchSummary
                                 watched={ watched }
                                 avgImdbRating={ avgImdbRating }
-                                avgRuntime={ avgRuntime }
+                                totalRuntime={ totalRuntime }
                                 avgUserRating={ avgUserRating }
                             />
                             <button
@@ -54,7 +50,8 @@ export const AppContent = () => {
                                 <span className="no-padding">{ isOpen2 ? '-' : '+' }</span>
                             </button>
                         </div>
-                        { isOpen2 && <WatchedList watched={ watched } /> }
+
+                        { selectedMovie !== null ? <MovieDetails /> : <WatchedList watched={ watched } /> }
                     </MovieListBox>
                 </div>
             </div>

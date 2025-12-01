@@ -205,7 +205,8 @@ header input {
 }
 
 .movie-details {
-  min-height: 18rem;
+  height: 79%;
+  overflow: scroll;
 }
 
 .movie-details-body {

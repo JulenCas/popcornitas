@@ -1,7 +1,7 @@
 import React from 'react';
 import { SmallData } from './SmallData';
 
-export const WatchSummary = ( { watched, avgImdbRating, avgRuntime, avgUserRating } ) => {
+export const WatchSummary = ( { watched, avgImdbRating, totalRuntime, avgUserRating } ) => {
     return (
         <div>
             <h2>Watch summary</h2>
@@ -9,7 +9,7 @@ export const WatchSummary = ( { watched, avgImdbRating, avgRuntime, avgUserRatin
                 <SmallData icon="#️⃣">{ watched.length } movies</SmallData>
                 <SmallData icon="⭐️">{ avgImdbRating }</SmallData>
                 <SmallData icon="🌟">{ avgUserRating }</SmallData>
-                <SmallData icon="⏳">{ avgRuntime } min</SmallData>
+                <SmallData icon="⏳">{ totalRuntime } hours</SmallData>
             </div>
         </div>
     );

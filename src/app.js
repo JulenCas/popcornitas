@@ -11,7 +11,7 @@ export default function App() {
 
     const avgImdbRating = average( watched.map( ( movie ) => movie.imdbRating ) );
     const avgUserRating = average( watched.map( ( movie ) => movie.userRating ) );
-    const avgRuntime = average( watched.map( ( movie ) => movie.runtime ) );
+    const totalRuntime = average( watched.map( ( movie ) => movie.runtime ) );
 
     return (
         <>
@@ -84,7 +84,7 @@ export default function App() {
                                     </p>
                                     <p>
                                         <span>⏳</span>
-                                        <span>{ avgRuntime } min</span>
+                                        <span>{ totalRuntime } min</span>
                                     </p>
                                 </div>
                             </div>

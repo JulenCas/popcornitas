@@ -133,6 +133,7 @@ export const MovieProvider = ( { children } ) => {
         error,
         selectedMovieId,
         selectedMovie,
+        setSelectedMovie,
         selectMovie,
         detailsLoading,
         detailsError,
