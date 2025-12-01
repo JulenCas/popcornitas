@@ -59,6 +59,7 @@ export const MovieDetails = () => {
 
             { !detailsLoading && !detailsError && selectedMovie && (
                 <div className="movie-details-body">
+
                     <div className="movie-details-content">
                         <div className="movie-details-heading">
                             <h2>{ selectedMovie.title }</h2>

@@ -133,12 +133,16 @@ header input {
 }
 
 .movielistbox ul {
-  height: 83%;
+  height: 84%;
   display: flex;
   gap: 1rem;
   overflow-x: scroll;
   flex-direction: column;
   padding: 0;
+}
+
+.movielistbox ul.watched-list {
+  height: 76%;
 }
 
 .summary {
