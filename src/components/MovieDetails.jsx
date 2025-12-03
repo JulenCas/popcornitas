@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMovieContext } from '../context/MovieContext';
 import { SmallData } from './SmallData';
 
@@ -36,26 +36,46 @@ const StarRating = ( { max = 10, defaultValue = 0, onRate = () => { } } ) => {
     );
 };
 
+const AddToWatchedButton = ( { onAdd, disabled } ) => (
+    <button
+        className="add-to-watched"
+        type="button"
+        onClick={ onAdd }
+        disabled={ disabled }
+    >
+        Add to watched list
+    </button>
+);
+
 export const MovieDetails = () => {
-    const { selectedMovie, setSelectedMovie, detailsLoading, detailsError, watched, addToWatched } = useMovieContext();
+    const [userRating, setUserRating] = useState( 0 );
+    const { selectedMovie, setSelectedMovieId, setSelectedMovie, detailsLoading, detailsError, watched, addToWatched } = useMovieContext();
 
     const watchedMovie = useMemo(
         () => watched.find( ( movie ) => movie.imdbID === selectedMovie?.imdbID ),
         [watched, selectedMovie?.imdbID],
     );
 
+    useEffect( () => {
+        setUserRating( watchedMovie?.userRating || 0 );
+    }, [watchedMovie?.userRating, selectedMovie?.imdbID] );
+
     const removeSelectedMovie = () => {
+        setSelectedMovieId( null );
         setSelectedMovie( null );
+    };
+
+    const handleAddToWatched = () => {
+        if ( !selectedMovie || !userRating ) return;
+
+        addToWatched( selectedMovie, userRating );
+        removeSelectedMovie();
     };
 
     return (
         <div className="movie-details">
             { detailsLoading && <p>Cargando detalle...</p> }
             { detailsError && <p className="error">{ detailsError }</p> }
-
-            { !detailsLoading && !detailsError && !selectedMovie && (
-                <p>Selecciona una película para ver sus detalles.</p>
-            ) }
 
             { !detailsLoading && !detailsError && selectedMovie && (
                 <div className="movie-details-body">
@@ -113,7 +133,11 @@ export const MovieDetails = () => {
                         <StarRating
                             key={ selectedMovie.imdbID }
                             defaultValue={ watchedMovie?.userRating || 0 }
-                            onRate={ ( rating ) => { addToWatched( selectedMovie, rating ); removeSelectedMovie(); } }
+                            onRate={ setUserRating }
+                        />
+                        <AddToWatchedButton
+                            onAdd={ handleAddToWatched }
+                            disabled={ !userRating }
                         />
                     </div>
                 </div>
