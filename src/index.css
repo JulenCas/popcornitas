@@ -1,11 +1,11 @@
 :root {
-  --color-primary: #6741d9;
-  --color-primary-light: #7950f2;
+  --color-primary: #7148fc;
+  --color-primary-dark: #0F4F44;
   --color-text: #dee2e6;
   --color-text-dark: #adb5bd;
-  --color-background-100: #973030;
+  --color-background-100: #1e293b;
   --color-background-500: #6d2727;
-  --color-background-900: #3D1414;
+  --color-background-900: #0c121c;
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -79,7 +79,7 @@ header input {
 
 .movielistbox {
   height: 80vh;
-  background-color: var(--color-background-500);
+  background-color: var(--color-background-100);
   border-radius: 12px;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), inset 1px 1px 2px rgba(255, 255, 255, .3);
   padding: 2rem;
@@ -296,15 +296,16 @@ header input {
   padding: 0.75rem 1.25rem;
   border-radius: 8px;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-background-900);
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition: .3s;
 }
 
 .add-to-watched:hover:not(:disabled) {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary);
   transform: translateY(-1px);
+  color: var(--color-text);
 }
 
 .add-to-watched:disabled {
