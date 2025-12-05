@@ -10,7 +10,7 @@ import { MovieDetails } from './components/MovieDetails';
 
 export const AppContent = () => {
     const { isOpen1, setIsOpen1, isOpen2, setIsOpen2, movies, watched, toggleOpen, selectedMovieId, loading, error } = useMovieContext();
-    const { avgImdbRating, avgUserRating, avgRuntime } = useMovieStats( watched );
+    const { avgImdbRating, avgUserRating, totalRuntimeHours } = useMovieStats( watched );
 
     return (
         <>
@@ -37,7 +37,7 @@ export const AppContent = () => {
                         <WatchSummary
                             watched={ watched }
                             avgImdbRating={ avgImdbRating }
-                            avgRuntime={ avgRuntime }
+                            totalRuntimeHours={ totalRuntimeHours }
                             avgUserRating={ avgUserRating }
                         />
                         <button

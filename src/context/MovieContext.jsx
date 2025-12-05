@@ -1,23 +1,8 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import * as moviesService from '../services/MoviesService';
+import { getMovieDetails, searchMovies } from '../application/movieUseCases';
+import { loadWatchedFromStorage, persistWatchedToStorage } from '../application/watchedStorage';
 
 const MovieContext = createContext();
-const WATCHED_STORAGE_KEY = 'popcornitas:watched';
-
-const getStoredWatched = () => {
-    try {
-        const stored = localStorage.getItem( WATCHED_STORAGE_KEY );
-        return stored ? JSON.parse( stored ) : [];
-    } catch ( error ) {
-        console.error( 'No se pudo leer la lista de vistos desde el almacenamiento', error );
-        return [];
-    }
-};
-
-const parseRuntime = ( runtime ) => {
-    const parsed = parseInt( runtime, 10 );
-    return Number.isNaN( parsed ) ? 0 : parsed;
-};
 
 const parseRating = ( rating ) => {
     const parsed = Number( rating );
@@ -27,7 +12,7 @@ const parseRating = ( rating ) => {
 export const MovieProvider = ( { children } ) => {
     const [query, setQuery] = useState( "" );
     const [movies, setMovies] = useState( [] );
-    const [watched, setWatched] = useState( getStoredWatched );
+    const [watched, setWatched] = useState( loadWatchedFromStorage );
     const [isOpen1, setIsOpen1] = useState( true );
     const [isOpen2, setIsOpen2] = useState( true );
     const [loading, setLoading] = useState( false );
@@ -40,11 +25,7 @@ export const MovieProvider = ( { children } ) => {
     const toggleOpen = ( setter ) => setter( ( open ) => !open );
 
     useEffect( () => {
-        try {
-            localStorage.setItem( WATCHED_STORAGE_KEY, JSON.stringify( watched ) );
-        } catch ( error ) {
-            console.error( 'No se pudo guardar la lista de vistos en el almacenamiento', error );
-        }
+        persistWatchedToStorage( watched );
     }, [watched] );
 
     const handleSearch = useCallback( async ( searchQuery ) => {
@@ -60,7 +41,7 @@ export const MovieProvider = ( { children } ) => {
         setSelectedMovie( null );
         setDetailsError( null );
         try {
-            const results = await moviesService.searchMovies( searchQuery );
+            const results = await searchMovies( searchQuery );
             setMovies( results );
         } catch ( err ) {
             setMovies( [] );
@@ -79,7 +60,7 @@ export const MovieProvider = ( { children } ) => {
         setDetailsError( null );
 
         try {
-            const details = await moviesService.getMovieDetails( imdbID );
+            const details = await getMovieDetails( imdbID );
             setSelectedMovie( details );
         } catch ( err ) {
             setSelectedMovie( null );
